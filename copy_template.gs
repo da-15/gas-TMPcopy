@@ -62,7 +62,7 @@ function main() {
     setDataOnTemplate(shData, arrRanges, (i + ROW_START_DATA), shCopy);
   }
   
-  Browser.msgBox(MSGs[0], Browser .Buttons.OK);
+  Browser.msgBox(MSGs[0], Browser.Buttons.OK);
 
 }
 
