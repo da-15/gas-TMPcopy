@@ -1,5 +1,6 @@
 // var URL_EXPORT_PDF = '1fVluS0wP1nZ3RTVJYFA6mzdhWUhwc86b';
 
+
 function savePDF(){
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var sheet = SpreadsheetApp.getActiveSheet();
@@ -85,7 +86,7 @@ function createPDF(folderid, ssid, sheetid, filename){
     //　PDFを指定したフォルダに保存
     folder.createFile(blob);
     
-    Browser.msgBox(MSG[1], Browser.Buttons.OK);
+    Browser.msgBox(MSGs[1], Browser.Buttons.OK);
     
   } catch(ex){
     Logger.log('ERR: ' + filename + ': ' + ex.message);
