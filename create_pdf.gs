@@ -1,6 +1,3 @@
-// var URL_EXPORT_PDF = '1fVluS0wP1nZ3RTVJYFA6mzdhWUhwc86b';
-
-
 function savePDF(){
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var sheet = SpreadsheetApp.getActiveSheet();
