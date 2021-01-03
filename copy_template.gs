@@ -1,6 +1,7 @@
 var ROW_TITLE = 1;
 var ROW_START_DATA = 2;
 var COL_START_DATA = 3;
+var COL_PRINT = 1;
 var COL_SHEET_NAME = 2;
 
 var NAME_SHEET_DATA = 'データ設定';
@@ -34,6 +35,7 @@ function onOpen(){
 */
 function main() {
   var arrTitles = [];
+  var arrPrint = [];
   var arrRanges = [];
   var thisBook = SpreadsheetApp.getActiveSpreadsheet();
   var shData = thisBook.getSheetByName(NAME_SHEET_DATA);
@@ -45,6 +47,8 @@ function main() {
   
   // タイトル名を配列で取得
   arrTitles = getActiveRowValues(shData, COL_SHEET_NAME, ROW_START_DATA);
+  // 印刷要不要を配列で取得
+  arrPrint =  getActiveRowValues(shData, COL_PRINT, ROW_START_DATA);
   Logger.log(arrTitles.length);
   
  
@@ -54,12 +58,15 @@ function main() {
   
   
   
-  for(var i = 0; i < arrTitles.length; i++){
-    // シートのコピー
-    shCopy = shTemp.copyTo(thisBook);
-    shCopy.setName((i + 1) + '_' + arrTitles[i]); // シート名をつける
-    // コピーしたシートにデータを書き出す
-    setDataOnTemplate(shData, arrRanges, (i + ROW_START_DATA), shCopy);
+  for(let i = 0, j = 1; i < arrTitles.length; i++){
+    
+    if(arrPrint[i] !== '済'){
+      // シートのコピー
+      shCopy = shTemp.copyTo(thisBook);
+      shCopy.setName((j++) + '_' + arrTitles[i]); // シート名をつける
+      // コピーしたシートにデータを書き出す
+      setDataOnTemplate(shData, arrRanges, (i + ROW_START_DATA), shCopy);
+    }
   }
   
   Browser.msgBox(MSGs[0], Browser.Buttons.OK);
@@ -76,7 +83,7 @@ function main() {
 */
 function setDataOnTemplate(fromSheet, arrRanges, fromIndex, toSheet){
 
-  for(var i = 0; i < arrRanges.length; i++){
+  for(let i = 0; i < arrRanges.length; i++){
     try{
        // 指定されたカラムにデータを書き出す
        toSheet.getRange(arrRanges[i]).setValue(fromSheet.getRange(fromIndex, COL_START_DATA + i).getValue());
@@ -96,7 +103,7 @@ function getActiveRowValues(sheet, numCol, numStartRow){
 
   if(numStartRow > 0 && numCol > 0){
     //指定された列を配列にする  
-    for(var i = numStartRow; i <= sheet.getLastRow(); i++){
+    for(let i = numStartRow; i <= sheet.getLastRow(); i++){
       arrResult.push(sheet.getRange(i, numCol).getValue());
     }
   }
@@ -112,7 +119,7 @@ function getActiveColValues(sheet, numRow, numStartCol){
 
   if(numStartCol > 0 && numRow > 0){
     //指定された行を配列にする  
-    for(var i = numStartCol; i <= sheet.getLastColumn(); i++){
+    for(let i = numStartCol; i <= sheet.getLastColumn(); i++){
       arrResult.push(sheet.getRange(numRow, i).getValue());
     }
   }
@@ -127,7 +134,7 @@ function clearSheets(){
   var thisBook = SpreadsheetApp.getActiveSpreadsheet();
   var sheets = thisBook.getSheets();
   
-  for(var i = 0; i < sheets.length; i++){
+  for(let i = 0; i < sheets.length; i++){
     // 設定シートとテンプレートシート意外を削除
     if(sheets[i].getName() != NAME_SHEET_DATA && sheets[i].getName() != NAME_SHEET_TEMPLATE){
       Logger.log(sheets[i].getName());
