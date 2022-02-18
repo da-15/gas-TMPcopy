@@ -13,6 +13,9 @@ const CONF = function (){
       PRINT: 1,
       SHEET_NAME: 2,
       START_DATA: 3
+    },
+    STATIC_NAME:{
+      DONE: '済'
     }
   };
 }();

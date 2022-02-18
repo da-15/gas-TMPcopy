@@ -7,9 +7,6 @@ function main() {
   const shData = sh.getSheetByName(CONF.SHEET_NAME.SETTING);
   const shTemp = sh.getSheetByName(CONF.SHEET_NAME.TEMPLATE);
   
-  // シートのクリア
-  clearSheets();
-  
   // タイトル名を配列で取得
   const titles = getActiveRowValues(shData, 
     CONF.SHEET_COL.SHEET_NAME, CONF.SHEET_ROW.START_DATA);
@@ -17,26 +14,30 @@ function main() {
   // 印刷要不要を配列で取得
   const printed =  getActiveRowValues(shData, 
     CONF.SHEET_COL.PRINT, CONF.SHEET_ROW.START_DATA);
-  Logger.log(titles.length);
   
- 
   // レンジ指定行を配列で取得
   const arrRanges = getActiveColValues(shData, 
     CONF.SHEET_ROW.TITLE, CONF.SHEET_COL.START_DATA);
-  Logger.log(arrRanges.length);
+
+
+  // シートのクリア
+  clearSheets();
   
   for(let i = 0, j = 1; i < titles.length; i++){
-    if(printed[i] !== '済'){
+    if(printed[i] !== CONF.STATIC_NAME.DONE){
       // テンプレートを複製
       const shCopy = shTemp.copyTo(sh);
       // シート名をつける
       shCopy.setName((j++) + '_' + titles[i]); 
       // コピーしたシートにデータを書き出す
       setDataOnTemplate(shData, arrRanges, (i + CONF.SHEET_ROW.START_DATA), shCopy);
+
+      // 出力したら出力済みフラグを立てる「済」
+      shData.getRange(CONF.SHEET_ROW.START_DATA + i, CONF.SHEET_COL.PRINT).setValue(CONF.STATIC_NAME.DONE);
     }
   }
   
-  Browser.msgBox(MSGs[0], Browser.Buttons.OK);
+  //Browser.msgBox(MSGs[0], Browser.Buttons.OK);
 }
 
 /* --------------------------------------------------
